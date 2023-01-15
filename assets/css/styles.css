@@ -3,6 +3,11 @@ body {
   font-size: 120%;
 }
 
+hr{
+  text-align: left;
+  
+}
+
 a {
   color: #563d7c;
   text-decoration: none;
