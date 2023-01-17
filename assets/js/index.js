@@ -1,10 +1,11 @@
 let button = document.querySelector("#start")
 let startScreen = document.querySelector("#start-screen")
 let questionsScreen = document.querySelector("#questions")
+let endScreen = document.querySelector("#end-screen")
 let time = document.querySelector("#time")
 let fragment = document.createDocumentFragment();
 let choices = document.getElementById("choices")
-let underline = document.createElement("hr")
+
 
 let qArr = [
 {question: "What can make the web interface pretty?", answers:["CSS", "JavaScript", "NodeJS", "Python"], correctAnswer: 0},
@@ -25,12 +26,12 @@ let globalTimer = 90;
 button.addEventListener("click", function(){
     startScreen.setAttribute("class", "hide")
     questionsScreen.setAttribute("class", "")
-    setInterval(function(){
+    let counting = setInterval(function(){
         globalTimer--
         time.textContent = globalTimer
         if(globalTimer === 0) {
-            clearInterval(globalTimer)
-            //to add message for losing screen
+            clearInterval(counting)
+            console.log("you lost")
         }
     },1000)
     displayQuestions()
@@ -40,6 +41,9 @@ button.addEventListener("click", function(){
 //this function will display the question in regards with the currentQuestion
 //and the answers also will be appended to the choices div
 function displayQuestions(){
+    if(currentQuestion === qArr.length) {
+        endQuiz();
+    }
     document.querySelector("#question-title").textContent = qArr[currentQuestion].question
     for(i=0;i<qArr[currentQuestion].answers.length;i++){
         let button = document.createElement("button")
@@ -48,25 +52,26 @@ function displayQuestions(){
         choices.appendChild(fragment)
         button.setAttribute("data-index", i)
     }
-    
-    }
+}
 
+
+// ending()
 
 //this will set a event listener to the start quiz button
 //and also make the validation for questions
 choices.addEventListener("click", function(event) {
     choices.innerHTML = "";
+    let underline = document.createElement("hr")
     for(i=0;i<qArr.length;i++){
-
         if(event.target.getAttribute("data-index") == qArr[currentQuestion].correctAnswer){
             console.log("correct")
-            choices.appendChild(underline)
-            // underline.textContent = "Correct!"
+            underline.textContent = "Correct!"
+            choices.append(underline)
         } else {
             console.log("incorrect")
             choices.appendChild(underline)
-            // underline.textContent = "Incorrect!"
-            globalTimer -= 10;
+            underline.textContent = "Incorrect!"
+            globalTimer -= 20;
         }
         currentQuestion++
         displayQuestions()
@@ -76,6 +81,12 @@ choices.addEventListener("click", function(event) {
 
 //at the end, this will store the remaining score(remaining time)
 //and store it locally, for highscores to access
+
+function endQuiz() {
+    questionsScreen.setAttribute("class", "hide")
+    endScreen.setAttribute("class", "")
+}
+
 
 
 
